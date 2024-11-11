@@ -10,11 +10,14 @@ import {
 } from "@/components/ui/sidebar";
 import { specialistMenuItems } from "./menu-items";
 
+import { HeaderSidebar } from "./header-sidebar";
+
 const menuItems = specialistMenuItems;
 
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
+      <HeaderSidebar />
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
