@@ -4,6 +4,7 @@ import vehicleABI from "@/abi/VehicleLogic.json";
 import Link from "next/link";
 
 import AddEventButton from "./add-event-button";
+import TransferBattery from "./transfer-battery";
 
 type vehicleEvent = {
   eventName: string;
@@ -51,6 +52,18 @@ export default async function VehicleIdPage({
   const actualBattery =
     batteryHistory.length > 0 ? batteryHistory[batteryHistory.length - 1] : "";
 
+  let batteryOwner = "";
+  if (actualBattery != "") {
+    batteryOwner = (await client.readContract({
+      address: actualBattery as `0x${string}`,
+      abi: vehicleABI.abi,
+      functionName: "ownerOf",
+      args: [1],
+    })) as string;
+  }
+
+  const isVehicleOwnerOfBattery = batteryOwner == slug ? true : false;
+
   const eventCount = (await client.readContract({
     address: slug as `0x${string}`,
     abi: vehicleABI.abi,
@@ -88,12 +101,24 @@ export default async function VehicleIdPage({
         </CardContent>
       </Card>
       <Card className="flex flex-col w-full mt-4">
-        <CardHeader>Battery</CardHeader>
+        <CardHeader>
+          <div className="flex flex-row">
+            <div>Battery</div>
+            {actualBattery && isVehicleOwnerOfBattery && (
+              <TransferBattery
+                vehicleAddress={slug as `0x${string}`}
+                batteryAddress={actualBattery as `0x${string}`}
+              />
+            )}
+          </div>
+        </CardHeader>
 
         <CardContent>
-          <Link href={`/specialist/battery/${actualBattery}`}>
-            {actualBattery}
-          </Link>
+          {isVehicleOwnerOfBattery && (
+            <Link href={`/specialist/battery/${actualBattery}`}>
+              {actualBattery}
+            </Link>
+          )}
         </CardContent>
       </Card>
       <Card className="flex flex-col w-full mt-4">

@@ -7,8 +7,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose,
+  // DialogTrigger,
+  // DialogClose,
 } from "@/components/ui/dialog";
 
 import AddEventForm from "./add-event-form";
